@@ -1,0 +1,66 @@
+/* src/components/WorkshopCard.css */
+.workshop-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .workshop-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .workshop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .workshop-header h3 {
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .workshop-id {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  .workshop-details {
+    margin-bottom: 15px;
+  }
+  
+  .workshop-details div {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #34495e;
+  }
+  
+  .workshop-details strong {
+    color: #2c3e50;
+  }
+  
+  .workshop-actions {
+    text-align: right;
+  }
+  
+  .view-participants {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .view-participants:hover {
+    color: #2980b9;
+    text-decoration: underline;
+  }

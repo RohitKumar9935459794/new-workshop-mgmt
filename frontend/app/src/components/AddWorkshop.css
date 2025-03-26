@@ -1,0 +1,65 @@
+/* src/components/AddWorkshop.css */
+.add-workshop {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .add-workshop h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+  }
+  
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #34495e;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .form-group select {
+    height: 40px;
+  }
+  
+  .submit-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover:not(:disabled) {
+    background-color: #2980b9;
+  }
+  
+  .submit-btn:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
