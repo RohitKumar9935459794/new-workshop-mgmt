@@ -1,0 +1,47 @@
+/* src/components/Participants.css */
+.participants {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .participants-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .participants-header h1 {
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .upload-toggle {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+  }
+  
+  .upload-toggle:hover {
+    background-color: #2980b9;
+  }
+  
+  .participants-list {
+    margin-top: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    min-height: 200px;
+  }
+  
+  .no-participants {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 40px 0;
+  }

@@ -1,0 +1,69 @@
+/* src/components/Workshops.css */
+.workshops {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .workshops-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .workshops-header h1 {
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .download-btn {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+  }
+  
+  .download-btn:hover {
+    background-color: #2ecc71;
+  }
+  
+  .workshops-list {
+    margin: 30px 0;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    gap: 15px;
+  }
+  
+  .pagination button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:not(:disabled):hover {
+    background-color: #2980b9;
+  }
+  
+  .pagination span {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
