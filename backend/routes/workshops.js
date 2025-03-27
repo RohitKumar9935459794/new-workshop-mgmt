@@ -107,7 +107,7 @@ router.get('/workshops', async (req, res) => {
             queryParams.push(mode);
         }
         if (speaker) {
-            filters.push(`speaker_name = ?`);
+            filters.push(`speaker = ?`);
             queryParams.push(speaker);
         }
 
@@ -130,7 +130,7 @@ router.get('/workshops/filters', async (req, res) => {
             db.query(`SELECT DISTINCT subject FROM workshop_details`),
             db.query(`SELECT DISTINCT technology FROM workshop_details`),
             db.query(`SELECT DISTINCT project FROM workshop_details`),
-            db.query(`SELECT DISTINCT speaker_name FROM workshop_details`)
+            db.query(`SELECT DISTINCT speaker FROM workshop_details`)
         ]);
 
         res.json({

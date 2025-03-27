@@ -35,7 +35,7 @@ const Dashboard = () => {
       <div className="year-selector">
         <label htmlFor="year">Financial Year:</label>
         <select id="year" value={year} onChange={handleYearChange}>
-          {Array.from({ length: 5 }, (_, i) => {
+          {Array.from({ length: 10 }, (_, i) => {
             const y = new Date().getFullYear() - 2 + i;
             return (
               <option key={y} value={y}>

@@ -38,7 +38,7 @@ const AddWorkshop = () => {
     
     try {
       await addWorkshop(formData);
-      navigate('/workshops');
+      navigate('/new');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to add workshop');
     } finally {
