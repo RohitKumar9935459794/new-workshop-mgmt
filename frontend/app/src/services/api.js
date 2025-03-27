@@ -75,3 +75,8 @@ export const downloadWorkshops = async () => {
     throw error;
   }
 };
+
+export const getFilterOptions = async () => {
+  const response = await fetch('/workshops/filters');
+  return await response.json();
+};
