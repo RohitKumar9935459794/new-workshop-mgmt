@@ -126,12 +126,18 @@ router.get('/workshops', async (req, res) => {
 // Fetch unique values for filters
 router.get('/workshops/filters', async (req, res) => {
     try {
-        const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
-            db.query(`SELECT DISTINCT subject FROM workshop_details`),
-            db.query(`SELECT DISTINCT technology FROM workshop_details`),
-            db.query(`SELECT DISTINCT project FROM workshop_details`),
-            db.query(`SELECT DISTINCT speaker FROM workshop_details`)
-        ]);
+        // const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
+        //     db.query(`SELECT DISTINCT subject FROM workshop_details`),
+        //     db.query(`SELECT DISTINCT technology FROM workshop_details`),
+        //     db.query(`SELECT DISTINCT project FROM workshop_details`),
+        //     db.query(`SELECT DISTINCT speaker FROM workshop_details`)
+        // ]);
+
+        const[subjects] = await db.query(`SELECT DISTINCT subject FROM workshop_details`);
+        const[technologies] = await db.query(`SELECT DISTINCT technology FROM workshop_details`);
+        const[projects] = await db.query(`SELECT DISTINCT project FROM workshop_details`);
+        const[speakers] = await db.query(`SELECT DISTINCT speaker FROM workshop_details`);
+
 
         res.json({
             subjects: subjects.map(s => s.subject),
