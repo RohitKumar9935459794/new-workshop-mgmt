@@ -43,4 +43,35 @@ router.post('/:workshopId/upload', upload.single('file'), async (req, res) => {
     }
 });
 
+// In your backend router
+router.get('/:workshopId/download', async (req, res) => {
+  try {
+    const [participants] = await db.query(
+      `SELECT * FROM participant_details WHERE workshop_id = ?`,
+      [req.params.workshopId]
+    );
+
+    const workbook = xlsx.utils.book_new();
+    const worksheet = xlsx.utils.json_to_sheet(participants);
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Participants");
+
+    const filePath = path.join(__dirname, 'downloads', `participants_${req.params.workshopId}.xlsx`);
+    
+    // Ensure downloads directory exists
+    if (!fs.existsSync(path.join(__dirname, 'downloads'))) {
+      fs.mkdirSync(path.join(__dirname, 'downloads'));
+    }
+
+    xlsx.writeFile(workbook, filePath);
+    
+    res.download(filePath, `participants_workshop_${req.params.workshopId}.xlsx`, (err) => {
+      // Delete file after download
+      fs.unlinkSync(filePath);
+      if (err) throw err;
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
