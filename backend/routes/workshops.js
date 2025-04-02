@@ -123,7 +123,29 @@ router.get('/workshops', async (req, res) => {
     }
 });
 
-// Fetch unique values for filters
+// // Fetch unique values for filters
+// router.get('/workshops/filters', async (req, res) => {
+//     try {
+//         const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
+//             db.query(`SELECT DISTINCT subject FROM workshop_details`),
+//             db.query(`SELECT DISTINCT technology FROM workshop_details`),
+//             db.query(`SELECT DISTINCT project FROM workshop_details`),
+//             db.query(`SELECT DISTINCT speaker_name FROM workshop_details`)
+//         ]);
+
+//         res.json({
+//             subjects: subjects.map(s => s.subject),
+//             technologies: technologies.map(t => t.technology),
+//             projects: projects.map(p => p.project),
+//             speakers: speakers.map(s => s.speaker_name),
+//             centres: ["Janakpuri", "Karkardooma", "Inderlok"],
+//             modes: ["Offline", "Online"]
+//         });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: error.message });
+//     }
+// });
+
 router.get('/workshops/filters', async (req, res) => {
     try {
         // const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
@@ -143,11 +165,12 @@ router.get('/workshops/filters', async (req, res) => {
             subjects: subjects.map(s => s.subject),
             technologies: technologies.map(t => t.technology),
             projects: projects.map(p => p.project),
-            speakers: speakers.map(s => s.speaker_name),
+            speakers: speakers.map(s => s.speaker),
             centres: ["Janakpuri", "Karkardooma", "Inderlok"],
             modes: ["Offline", "Online"]
         });
     } catch (error) {
+        console.error('Error fetching filters:', error); // Better logging
         res.status(500).json({ success: false, message: error.message });
     }
 });

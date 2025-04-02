@@ -1,0 +1,105 @@
+/* Main container with marine blue background */
+.auth-container {
+    display: flex;
+    height: 100vh;
+    background-color: #1a4b8c; /* Marine blue */
+  }
+  
+  /* Left section - image */
+  .auth-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #1a4b8c; /* Marine blue */
+  }
+  
+  .auth-image-container {
+    max-width: 80%;
+    max-height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .auth-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Right section - login form */
+  .auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+  }
+  
+  .auth-box {
+    width: 80%;
+    max-width: 400px;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auth-box h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  
+  .form-group input:focus {
+    border-color: #1a4b8c;
+    outline: none;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    margin: 0.5rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a4b8c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .login-btn:hover {
+    background-color: #045fd77e;
+  }

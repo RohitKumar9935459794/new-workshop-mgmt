@@ -87,32 +87,72 @@
 
 
 // src/App.js
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+// import React, { useState } from 'react';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import Navbar from './components/Navbar';
+// import Dashboard from './components/Dashboard';
+// import Workshops from './components/Workshops';
+// import AddWorkshop from './components/AddWorkshop';
+// import Participants from './components/Participants';
+// import './App.css';
+
+// function App() {
+//   const [activeTab, setActiveTab] = useState('dashboard');
+  
+//   return (
+//     <Router>
+//       <div className="app-container">
+//         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+//         <div className="content-container">
+//           <Routes>
+//             <Route path="/" element={<Dashboard />} />
+//             <Route path="/dashboard" element={<Dashboard />} />
+//             <Route path="/workshops" element={<Workshops />} />
+//             <Route path="/add-workshop" element={<AddWorkshop />} />
+//             <Route path="/participants/:workshopId" element={<Participants />} />
+//           </Routes>
+//         </div>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 import Workshops from './components/Workshops';
 import AddWorkshop from './components/AddWorkshop';
 import Participants from './components/Participants';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  
   return (
     <Router>
-      <div className="app-container">
-        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className="content-container">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/workshops" element={<Workshops />} />
-            <Route path="/add-workshop" element={<AddWorkshop />} />
-            <Route path="/participants/:workshopId" element={<Participants />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Auth />} />
+        
+        <Route element={(
+          <div className="app-layout">
+            <Navbar />
+            <div className="main-content">
+              <ProtectedRoute>
+                <Outlet />
+              </ProtectedRoute>
+            </div>
+          </div>
+        )}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/workshops" element={<Workshops />} />
+          <Route path="/add-workshop" element={<AddWorkshop />} />
+          <Route path="/participants/:workshopId" element={<Participants />} />
+        </Route>
+        
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
     </Router>
   );
 }
