@@ -88,10 +88,7 @@ export const uploadParticipants = async (workshopId, file) => {
     const formData = new FormData();
     formData.append('file', file); // Make sure the field name is 'file'
     
-    const response = await axios.post(
-      `${API_BASE_URL}/${workshopId}/upload`, 
-      formData,
-      {
+    const response = await axios.post(`${API_BASE_URL}/${workshopId}/upload`, formData,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }
