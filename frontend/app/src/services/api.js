@@ -33,26 +33,26 @@ export const addWorkshop = async (workshopData) => {
   }
 };
 
-// // export const uploadParticipants = async (workshopId, file) => {
-//  // try {
-//   //  const formData = new FormData();
-//     formData.append('file', file);
+ export const uploadParticipants = async (workshopId, file) => {
+  try {
+   const formData = new FormData();
+    formData.append('file', file);
     
-//     const response = await axios.post(
-//       `${API_BASE_URL}/${workshopId}/upload`, 
-//       formData,
-//       {
-//         headers: {
-//           'Content-Type': 'multipart/form-data'
-//         }
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error uploading participants:', error);
-//     throw error;
-//   }
-// //};
+    const response = await axios.post(
+      `${API_BASE_URL}/${workshopId}/upload`, 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading participants:', error);
+    throw error;
+  }
+};
 
 export const getWorkshopStats = async (year) => {
   try {
@@ -82,24 +82,24 @@ export const getFilterOptions = async () => {
 };
 
 
-// src/services/api.js
-export const uploadParticipants = async (workshopId, file) => {
-  try {
-    const formData = new FormData();
-    formData.append('file', file); // Make sure the field name is 'file'
+// // src/services/api.js
+// export const uploadParticipants = async (workshopId, file) => {
+//   try {
+//     const formData = new FormData();
+//     formData.append('file', file); // Make sure the field name is 'file'
     
-    const response = await axios.post(`${API_BASE_URL}/${workshopId}/upload`, formData,{
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error uploading participants:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.error || 'Failed to upload participants');
-  }
-};
+//     const response = await axios.post(`${API_BASE_URL}/${workshopId}/upload`, formData,{
+//         headers: {
+//           'Content-Type': 'multipart/form-data'
+//         }
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error uploading participants:', error.response?.data || error.message);
+//     throw new Error(error.response?.data?.error || 'Failed to upload participants');
+//   }
+// };
 
 export const downloadParticipants = async (workshopId) => {
   try {
