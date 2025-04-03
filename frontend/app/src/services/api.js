@@ -115,3 +115,19 @@ export const downloadParticipants = async (workshopId) => {
     throw error;
   }
 };
+//api for fetching participant details from backend 
+export const getParticipants = async (workshopId, page = 1, limit = 20) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${workshopId}`, {
+      params: {
+        page,
+        limit
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching participants:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.error || 'Failed to fetch participants');
+  }
+};
+

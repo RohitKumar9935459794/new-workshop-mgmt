@@ -3,32 +3,6 @@ const router = express.Router();
 const db = require('../config/db');
 const xlsx = require('xlsx');
 
-// Get all workshops
-// router.get('/workshops', async (req, res) => {
-//     try {
-//         const [workshops] = await db.query("SELECT * FROM workshop_details ORDER BY WORKSHOP_ID DESC LIMIT 10");
-//         res.json(workshops);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
-// Fetch workshops with pagination
-// router.get('/workshops', async (req, res) => {
-//     try {
-//         const page = parseInt(req.query.page) || 1;
-//         const limit = 5;
-//         const offset = (page - 1) * limit;
-
-//         const [workshops] = await db.query(`SELECT * FROM workshop_details ORDER BY workshop_id DESC LIMIT ? OFFSET ?`, [limit, offset]);
-//         const [[{ total }]] = await db.query(`SELECT COUNT(*) as total FROM workshop_details`);
-
-//         res.json({ success: true, workshops, total });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: error.message });
-//     }
-// });
-
-
 // Insert new workshop
 router.post('/new', async (req, res) => {
     const { subject, from_date, till_date, technology, project, venue, centre, mode, speaker_name, other1, other2, other3 } = req.body;
@@ -123,28 +97,7 @@ router.get('/workshops', async (req, res) => {
     }
 });
 
-// // Fetch unique values for filters
-// router.get('/workshops/filters', async (req, res) => {
-//     try {
-//         const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
-//             db.query(`SELECT DISTINCT subject FROM workshop_details`),
-//             db.query(`SELECT DISTINCT technology FROM workshop_details`),
-//             db.query(`SELECT DISTINCT project FROM workshop_details`),
-//             db.query(`SELECT DISTINCT speaker_name FROM workshop_details`)
-//         ]);
 
-//         res.json({
-//             subjects: subjects.map(s => s.subject),
-//             technologies: technologies.map(t => t.technology),
-//             projects: projects.map(p => p.project),
-//             speakers: speakers.map(s => s.speaker_name),
-//             centres: ["Janakpuri", "Karkardooma", "Inderlok"],
-//             modes: ["Offline", "Online"]
-//         });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: error.message });
-//     }
-// });
 
 router.get('/workshops/filters', async (req, res) => {
     try {
