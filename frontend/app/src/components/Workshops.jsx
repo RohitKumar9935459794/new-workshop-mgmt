@@ -1,7 +1,7 @@
 // src/components/Workshops.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getWorkshops, getWorkshopFilters, downloadWorkshops } from '../services/api';
+import { getWorkshops, getWorkshopFilters, downloadWorkshops , getWorkshopParticipantsCount } from '../services/api';
 import WorkshopCard from './WorkshopCard';
 import Filters from './Filters';
 import './Workshops.css';

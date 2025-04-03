@@ -131,3 +131,12 @@ export const getParticipants = async (workshopId, page = 1, limit = 20) => {
   }
 };
 
+
+// returning participent count
+export const getWorkshopParticipantsCount = async (workshopId) => {
+  const response = await fetch(`http://localhost:5000/api/${workshopId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch participants count');
+  }
+  return await response.json();
+};
