@@ -68,7 +68,7 @@ const WorkshopCard = ({ workshop }) => {
       
       <div className="workshop-actions">
         <Link 
-          to={`/participants/${workshop.WorkShop_ID}`}
+          to={`/${workshop.WorkShop_ID}`}
           className="view-participants"
         >
           View Participants
