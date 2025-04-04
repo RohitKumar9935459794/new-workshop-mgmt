@@ -64,6 +64,9 @@ const WorkshopCard = ({ workshop }) => {
         <div>
           <strong>Speaker:</strong> {workshop.speaker}
         </div>
+        <div>
+        <strong>Participants:</strong> {workshop.total_participants || 0}
+        </div>
       </div>
       
       <div className="workshop-actions">

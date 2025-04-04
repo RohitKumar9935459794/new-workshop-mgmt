@@ -131,3 +131,22 @@ export const getParticipants = async (workshopId, page = 1, limit = 20) => {
   }
 };
 
+
+// returning participent count
+export const getWorkshopParticipantsCount = async (workshopId) => {
+  const response = await fetch(`http://localhost:5000/api/${workshopId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch participants count');
+  }
+  return await response.json();
+};
+
+
+//returning fitter count 
+// src/services/api.js
+export const getWorkshopFitterStats = async (filters = {}) => {
+  const queryString = new URLSearchParams(filters).toString();
+  const response = await fetch(`/api/workshops/stats?${queryString}`);
+  if (!response.ok) throw new Error('Failed to fetch workshop statistics');
+  return await response.json();
+};
