@@ -140,3 +140,13 @@ export const getWorkshopParticipantsCount = async (workshopId) => {
   }
   return await response.json();
 };
+
+
+//returning fitter count 
+// src/services/api.js
+export const getWorkshopFitterStats = async (filters = {}) => {
+  const queryString = new URLSearchParams(filters).toString();
+  const response = await fetch(`/api/workshops/stats?${queryString}`);
+  if (!response.ok) throw new Error('Failed to fetch workshop statistics');
+  return await response.json();
+};

@@ -168,3 +168,153 @@ router.get('/workshops/download', async (req, res) => {
 });
 
 module.exports = router;
+
+// routes/workshops.js
+
+/**
+ * @swagger
+ * /workshops/stats:
+ *   get:
+ *     summary: Get workshop and participant statistics with flexible filtering
+ *     description: |
+ *       Get counts of workshops and participants with various filters.
+ *       Financial year can be specified (April 1 to March 31 of next year).
+ *       Other filters can be combined as needed.
+ *     parameters:
+ *       - in: query
+ *         name: year
+ *         schema:
+ *           type: integer
+ *         description: The starting year of the financial year (e.g., 2023 for FY 2023-24)
+ *       - in: query
+ *         name: mode
+ *         schema:
+ *           type: string
+ *         description: Workshop mode (Online/Offline)
+ *       - in: query
+ *         name: subject
+ *         schema:
+ *           type: string
+ *         description: Workshop subject
+ *       - in: query
+ *         name: technology
+ *         schema:
+ *           type: string
+ *         description: Technology used in workshop
+ *       - in: query
+ *         name: centre
+ *         schema:
+ *           type: string
+ *         description: Centre where workshop was conducted
+ *     responses:
+ *       200:
+ *         description: Statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 filters:
+ *                   type: object
+ *                   description: Applied filters
+ *                 total_workshops:
+ *                   type: integer
+ *                 total_participants:
+ *                   type: integer
+ *       400:
+ *         description: Invalid parameters
+ *       500:
+ *         description: Server error
+ */
+router.get('/stats', async (req, res) => {
+    try {
+        const { year, mode, subject, technology, centre } = req.query;
+        const filters = {};
+        const whereClauses = [];
+        const queryParams = [];
+
+        // Handle financial year filter if provided
+        if (year) {
+            const numericYear = parseInt(year);
+            if (isNaN(numericYear) || numericYear < 2000 || numericYear > 2100) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid year parameter. Please provide a valid year between 2000 and 2100.'
+                });
+            }
+            
+            const startDate = `${numericYear}-04-01`;
+            const endDate = `${numericYear + 1}-03-31`;
+            
+            whereClauses.push('w.from_date BETWEEN ? AND ?');
+            queryParams.push(startDate, endDate);
+            filters.financial_year = `${numericYear}-${(numericYear + 1).toString().slice(-2)}`;
+        }
+
+        // Handle other filters
+        if (mode) {
+            whereClauses.push('w.mode = ?');
+            queryParams.push(mode);
+            filters.mode = mode;
+        }
+        
+        if (subject) {
+            whereClauses.push('w.subject = ?');
+            queryParams.push(subject);
+            filters.subject = subject;
+        }
+        
+        if (technology) {
+            whereClauses.push('w.technology = ?');
+            queryParams.push(technology);
+            filters.technology = technology;
+        }
+        
+        if (centre) {
+            whereClauses.push('w.centre = ?');
+            queryParams.push(centre);
+            filters.centre = centre;
+        }
+
+        // Build WHERE clause
+        const whereClause = whereClauses.length > 0 
+            ? `WHERE ${whereClauses.join(' AND ')}` 
+            : '';
+
+        // Execute both queries in parallel
+        const [workshopResult, participantResult] = await Promise.all([
+            db.query(
+                `SELECT COUNT(*) AS total 
+                 FROM workshop_details w
+                 ${whereClause}`,
+                queryParams
+            ),
+            db.query(
+                `SELECT COUNT(*) AS total 
+                 FROM participant_details p 
+                 JOIN workshop_details w ON p.workshop_id = w.workshop_id 
+                 ${whereClause}`,
+                queryParams
+            )
+        ]);
+
+        res.json({
+            success: true,
+            filters: filters,
+            total_workshops: workshopResult[0][0].total,
+            total_participants: participantResult[0][0].total
+        });
+
+    } catch (error) {
+        console.error('Error fetching workshop statistics:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve workshop statistics',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+module.exports = router;
