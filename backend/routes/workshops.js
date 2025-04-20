@@ -99,6 +99,59 @@ router.get('/workshops', async (req, res) => {
 
 
 
+// Fetch workshops with particular workshop id 
+router.get('/workshops/:workshopId', async (req, res) => {
+    try {
+        
+
+        const rawId = req.params.workshopId;
+        const workshopId = parseInt(rawId.toString().replace(/\D/g, ''));
+        
+        if (isNaN(workshopId) ){
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid Workshop ID format',
+                received: rawId,
+                solution: 'Please provide a numeric workshop ID'
+            });
+        }
+  
+        
+              // Check if workshop exists
+              const [workshop] = await db.query(
+                  `SELECT workShop_ID FROM workshop_details WHERE workShop_ID = ?`, 
+                  [workshopId]
+              );
+              
+              if (!workshop.length) {
+                  return res.status(404).json({
+                      success: false,
+                      error: `Workshop not found`,
+                      workshopId: workshopId,
+                      note: 'Verify the workshop ID exists in the system'
+                  });
+              }
+        
+             
+              const [workshopDetails] = await db.query(
+                  `SELECT * FROM workshop_details WHERE workshop_id = ?`,
+                  [workshopId]
+              );
+
+              res.json({
+                success: true,
+                workshopDetails
+             });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
+
+
+
+
 router.get('/workshops/filters', async (req, res) => {
     try {
         // const [[subjects], [technologies], [projects], [speakers]] = await Promise.all([
@@ -232,6 +285,8 @@ module.exports = router;
  *       500:
  *         description: Server error
  */
+
+// for getting count of workshop and participant with filters
 router.get('/stats', async (req, res) => {
     try {
         const { year, mode, subject, technology, centre } = req.query;

@@ -1,5 +1,5 @@
 /* src/components/WorkshopCard.css */
-.workshop-card {
+/*.workshop-card {
     background-color: white;
     border-radius: 8px;
     padding: 20px;
@@ -63,4 +63,157 @@
   .view-participants:hover {
     color: #2980b9;
     text-decoration: underline;
+  }*/
+
+  .excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
   }
+  
+  .excel-table th,
+  .excel-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  
+  .excel-table th {
+    background-color: #e3f2fd;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .excel-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .excel-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .view-link {
+    color: #007bff;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  .view-link:hover {
+    text-decoration: none;
+  }
+  
+
+  .excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+  }
+  
+  .excel-table th,
+  .excel-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  
+  .excel-table th {
+    background-color: #e3f2fd;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .excel-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .excel-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .view-link {
+    color: #007bff;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  .view-link:hover {
+    text-decoration: none;
+  }
+
+  
+  .view-participants {
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-participants:hover {
+    background-color: #0056b3;
+  }
+
+  
+.WorkShop_ID{
+  width: 300px;
+  
+}
+
+.w_subject{
+  width: 300px;
+  word-wrap: break-word;   /* ✅ Ensures long words wrap inside box */
+  overflow-wrap: break-word;
+  height: auto; 
+  white-space: normal;
+  overflow-x: hidden;
+}
+
+.w_From_Date{
+  width: 300px;
+}
+
+.w_Till_Date{
+  width: 300px;
+}
+
+.w_Technology{
+  width: 300px;
+  word-wrap: break-word;   /* ✅ Ensures long words wrap inside box */
+  overflow-wrap: break-word;
+  height: auto; 
+  white-space: normal;
+  overflow-x: hidden;
+}
+
+.w_Mode{
+  width: 300px;
+}
+
+.w_Venue{
+  width: 300px;
+}
+
+.w_speaker{
+  width: 300px;
+}
+
+.w_total_participants{
+  width: 300px;
+}
+
+.w_view{
+  width: 300px;
+}
+
