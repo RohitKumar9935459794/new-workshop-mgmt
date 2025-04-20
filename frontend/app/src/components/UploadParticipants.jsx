@@ -89,7 +89,7 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
     <div className="participants-container">
       <div className="upload-section">
         <div className="upload-participants">
-          <h3>Upload Participants Excel</h3>
+          <h3>Add Participants Excel</h3>
           
           {error && <div className="error-message">{error}</div>}
           {success && (
@@ -133,11 +133,19 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
               >
                 Close
               </button>
+
+
+              
             </div>
           </form>
         </div>
       </div>
+      <div>
+        
       </div>
+      
+      </div>
+      
  );
   };
 {/* /* 
