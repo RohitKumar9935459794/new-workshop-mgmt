@@ -1,18 +1,41 @@
-// src/services/api.js
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api'; // Update with your backend URL
 
-export const getWorkshops = async (params = {}) => {
+//API 1: adding new workshop data
+export const addWorkshop = async (workshopData) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/workshops`, { params });
+    const response = await axios.post(`${API_BASE_URL}/workshops/new`, workshopData);
     return response.data;
   } catch (error) {
-    console.error('Error fetching workshops:', error);
+    console.error('Error adding workshop:', error);
     throw error;
   }
 };
 
+//API 2: adding participant for workshop with workshopid
+
+export const addParticipantToWorkshop = async (workshopId, file) => {
+ try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await axios.post(`${API_BASE_URL}/workshops/${workshopId}/upload`, 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading participants:', error);
+    throw error;
+  }
+};
+
+
+//API 3: get workshop filters
 export const getWorkshopFilters = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/workshops/filters`);
@@ -23,36 +46,8 @@ export const getWorkshopFilters = async () => {
   }
 };
 
-export const addWorkshop = async (workshopData) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/new`, workshopData);
-    return response.data;
-  } catch (error) {
-    console.error('Error adding workshop:', error);
-    throw error;
-  }
-};
 
-// // export const uploadParticipants = async (workshopId, file) => {
-//  // try {
-//   //  const formData = new FormData();
-//     formData.append('file', file);
-    
-//     const response = await axios.post(
-//       `${API_BASE_URL}/${workshopId}/upload`, 
-//       formData,
-//       {
-//         headers: {
-//           'Content-Type': 'multipart/form-data'
-//         }
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error uploading participants:', error);
-//     throw error;
-//   }
-// //};
+//API 4:  get total workshops and participant in particular financial year
 
 export const getWorkshopStats = async (year) => {
   try {
@@ -64,9 +59,48 @@ export const getWorkshopStats = async (year) => {
   }
 };
 
-export const downloadWorkshops = async () => {
+//API 5: get wrokshop reports with or without filter
+export const getWorkshops = async (params = {}) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/workshops/download`, {
+    const response = await axios.get(`${API_BASE_URL}/workshops/reports`, { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching workshops:', error);
+    throw error;
+  }
+};
+
+//API 6: get participant reports with or without filter
+export const getParticipantsReports = async ( params = {}) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/participants/reports`, { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching participants:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.error || 'Failed to fetch participants');
+  }
+};
+
+//API 7
+// Fetch participants for a specific workshop by its ID (VARCHAR) with pagination
+
+export const getParticipantswithId = async (workshopId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/participants/${workshopId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching participants:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.error || 'Failed to fetch participants');
+  }
+};
+
+
+//API 8
+//  to download filtered workshop reports as excel/pdf (one api format as query parameter)
+
+export const downloadWorkshopReports = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/workshops/reports/download`, {
       responseType: 'blob'
     });
     return response.data;
@@ -76,77 +110,17 @@ export const downloadWorkshops = async () => {
   }
 };
 
-export const getFilterOptions = async () => {
-  const response = await fetch('/workshops/filters');
-  return await response.json();
-};
 
-
-// src/services/api.js
-export const uploadParticipants = async (workshopId, file) => {
+//API 9
+//  to download filtered participant reports as excel/pdf 
+export const downloadParticipantReports = async () => {
   try {
-    const formData = new FormData();
-    formData.append('file', file); // Make sure the field name is 'file'
-    
-    const response = await axios.post(
-      `${API_BASE_URL}/${workshopId}/upload`, 
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error uploading participants:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.error || 'Failed to upload participants');
-  }
-};
-
-export const downloadParticipants = async (workshopId) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/participants/${workshopId}/download`, {
+    const response = await axios.get(`${API_BASE_URL}/participants/reports/download`, {
       responseType: 'blob'
     });
     return response.data;
   } catch (error) {
-    console.error('Error downloading participants:', error);
+    console.error('Error downloading workshops:', error);
     throw error;
   }
-};
-//api for fetching participant details from backend 
-export const getParticipants = async (workshopId, page = 1, limit = 20) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/${workshopId}`, {
-      params: {
-        page,
-        limit
-      }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching participants:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.error || 'Failed to fetch participants');
-  }
-};
-
-
-// returning participent count
-export const getWorkshopParticipantsCount = async (workshopId) => {
-  const response = await fetch(`http://localhost:5000/api/${workshopId}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch participants count');
-  }
-  return await response.json();
-};
-
-
-//returning fitter count 
-// src/services/api.js
-export const getWorkshopFitterStats = async (filters = {}) => {
-  const queryString = new URLSearchParams(filters).toString();
-  const response = await fetch(`/api/workshops/stats?${queryString}`);
-  if (!response.ok) throw new Error('Failed to fetch workshop statistics');
-  return await response.json();
 };
