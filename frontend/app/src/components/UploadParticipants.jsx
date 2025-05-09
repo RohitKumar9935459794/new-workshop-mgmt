@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { uploadParticipants } from '../services/api';
+import { addParticipantToWorkshop } from '../services/api';
 import './UploadParticipants.css';
 // import './ParticipantsTable.css';
 
@@ -62,7 +62,7 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
     setError('');
     
     try {
-      await uploadParticipants(workshopId, file);
+      await addParticipantToWorkshop(workshopId, file);
       setSuccess(true);
       setFile(null);
       

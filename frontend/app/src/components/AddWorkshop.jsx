@@ -10,9 +10,9 @@ const AddWorkshop = () => {
     subject: '',
     from_date: '',
     till_date: '',
+    duration: '',
     technology: '',
     project: '',
-    venue: '',
     centre: '',
     mode: '',
     speaker_name: '',
@@ -90,6 +90,18 @@ const AddWorkshop = () => {
         
         <div className="form-row">
           <div className="form-group">
+            <label>Duration:</label>
+            <input
+              type="number"
+              name="duration"
+              value={formData.duration}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
             <label>Technology:</label>
             <input
               type="text"
@@ -110,16 +122,7 @@ const AddWorkshop = () => {
             />
           </div>
           
-          <div className="form-group">
-            <label>Venue:</label>
-            <input
-              type="text"
-              name="venue"
-              value={formData.venue}
-              onChange={handleChange}
-              required
-            />
-          </div>
+         
         </div>
         
         <div className="form-row">
@@ -149,6 +152,7 @@ const AddWorkshop = () => {
               <option value="">Select Mode</option>
               <option value="Offline">Offline</option>
               <option value="Online">Online</option>
+              <option value="Online">Hybrid</option>
             </select>
           </div>
           
