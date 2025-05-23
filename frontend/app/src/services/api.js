@@ -62,6 +62,9 @@ export const getWorkshopStats = async (year) => {
 //API 5: get wrokshop reports with or without filter
 export const getWorkshops = async (params = {}) => {
   try {
+    const cleanedParams = Object.fromEntries(
+      Object.entries(params).filter(([_, v]) => v !== undefined && v !== null)
+    );
     const response = await axios.get(`${API_BASE_URL}/workshops/reports`, { params });
     return response.data;
   } catch (error) {
@@ -97,30 +100,95 @@ export const getParticipantswithId = async (workshopId) => {
 
 //API 8
 //  to download filtered workshop reports as excel/pdf (one api format as query parameter)
-
-export const downloadWorkshopReports = async () => {
+export const downloadWorkshopReports = async (filters, format) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/workshops/reports/download`, {
+      params: { ...filters, format },
       responseType: 'blob'
     });
-    return response.data;
+
+    // Check if backend responded with a valid Excel/PDF file
+    const contentType = response.headers['content-type'];
+    if (!contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') &&
+        !contentType.includes('application/pdf')) {
+      // It's probably an error sent as JSON
+      const reader = new FileReader();
+      reader.onload = () => {
+        const errorMsg = JSON.parse(reader.result);
+        console.error('Download failed:', errorMsg.message || 'Unknown error');
+        alert(`Download failed: ${errorMsg.message || 'Invalid response from server'}`);
+      };
+      reader.readAsText(response.data);
+      return;
+    }
+
+    // Extract filename from response headers
+    const contentDisposition = response.headers['content-disposition'];
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="?([^"]+)"?/);
+    const extension = format === 'excel' ? 'xlsx' : format === 'pdf' ? 'pdf' : 'dat';
+    const filename = filenameMatch ? filenameMatch[1] : `workshop_report.${extension}`;
+
+    // Create and trigger file download
+    const blob = new Blob([response.data], { type: contentType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
-    console.error('Error downloading workshops:', error);
-    throw error;
+    console.error('Error downloading workshop report:', error);
+    alert('Failed to download report. Please try again later.');
   }
 };
 
 
 //API 9
 //  to download filtered participant reports as excel/pdf 
-export const downloadParticipantReports = async () => {
+
+export const downloadParticipantReports = async (filters, format) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/participants/reports/download`, {
+      params: { ...filters, format },
       responseType: 'blob'
     });
-    return response.data;
+
+    // Check if backend responded with a valid Excel/PDF file
+    const contentType = response.headers['content-type'];
+    if (!contentType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') &&
+        !contentType.includes('application/pdf')) {
+      // It's probably an error sent as JSON
+      const reader = new FileReader();
+      reader.onload = () => {
+        const errorMsg = JSON.parse(reader.result);
+        console.error('Download failed:', errorMsg.message || 'Unknown error');
+        alert(`Download failed: ${errorMsg.message || 'Invalid response from server'}`);
+      };
+      reader.readAsText(response.data);
+      return;
+    }
+
+    // Extract filename from response headers
+    const contentDisposition = response.headers['content-disposition'];
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="?([^"]+)"?/);
+    const extension = format === 'excel' ? 'xlsx' : format === 'pdf' ? 'pdf' : 'dat';
+    const filename = filenameMatch ? filenameMatch[1] : `participant_report.${extension}`;
+
+    // Create and trigger file download
+    const blob = new Blob([response.data], { type: contentType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(downloadUrl);
   } catch (error) {
-    console.error('Error downloading workshops:', error);
-    throw error;
+    console.error('Error downloading Participant report:', error);
+    alert('Failed to download report. Please try again later.');
   }
 };
+

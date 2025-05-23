@@ -1,45 +1,80 @@
-src/components/Dashboard.css
+/* Full-height dashboard with generous spacing */
 .dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .dashboard h1 {
-    color: #2c3e50;
-    margin-bottom: 30px;
-  }
-  
-  .year-selector {
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .year-selector label {
-    margin-right: 10px;
-    font-weight: 500;
-    color: #34495e;
-  }
-  
-  .year-selector select {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid #bdc3c7;
-    background-color: white;
-    font-size: 1rem;
-  }
-  
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .no-results {
-    text-align: center;
-    padding: 40px;
-    color: #7f8c8d;
-    font-size: 1.1rem;
-  }
+  min-height: 100vh;
+  width: 100%;
+  padding: 60px 40px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Main title */
+.dashboard h1 {
+  color: #2c3e50;
+  font-size: 2.8rem;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+/* Year selector area */
+.year-selector {
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+
+.year-selector label {
+  font-weight: 600;
+  color: #34495e;
+  font-size: 1.8rem;
+}
+
+.year-selector .year-picker {
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #bdc3c7;
+  background-color: white;
+  font-size: 1.2rem;
+  width: 120px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Stats card grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  padding: 0 20px;
+  margin-bottom: 40px;
+}
+
+/* Date range info below stats */
+.financial-range {
+  margin-top: 30px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  color: rgb(141, 85, 85);
+  font-size: 1.2rem;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 1.4rem;
+  color: #7f8c8d;
+}
+
+/* No data message */
+.no-results {
+  text-align: center;
+  padding: 50px;
+  color: #7f8c8d;
+  font-size: 1.3rem;
+}
