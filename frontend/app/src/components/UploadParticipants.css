@@ -1,79 +1,153 @@
-/* src/components/UploadParticipants.css */
-.upload-participants {
-    border: 1px dashed #bdc3c7;
-    border-radius: 4px;
-    padding: 20px;
-    margin-bottom: 30px;
-    background-color: #f9f9f9;
-  }
+.instructions {
+  background-color: #f8f9fa;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: rgb(107, 3, 3);
+}
+
+.instructions ul {
+  padding-left: 15px;
   
-  .upload-participants h3 {
-    margin-top: 0;
-    color: #2c3e50;
-  }
-  
-  .file-input {
-    margin-bottom: 20px;
-  }
-  
-  .file-input input[type="file"] {
-    display: none;
-  }
-  
-  .file-input label {
-    display: inline-block;
-    background-color: #3498db;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .file-input label:hover {
-    background-color: #2980b9;
-  }
-  
-  .file-name {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #7f8c8d;
-  }
-  
-  .buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .upload-btn {
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .upload-btn:hover:not(:disabled) {
-    background-color: #2ecc71;
-  }
-  
-  .upload-btn:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-  }
-  
-  .cancel-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #c0392b;
-  }
+}
+
+.instructions code {
+  background-color: #e9ecef;
+  padding: 2px 5px;
+  border-radius: 4px;
+  display: block;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+h3{
+  font-size: 2rem;
+}
+
+
+
+/* Error & success messages */
+.error-message {
+  color: #dc3545;
+  background: #ffe6e6;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: #155724;
+  background: #d4edda;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* File input styling */
+.file-input-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.file-input-label {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.file-input-label:hover {
+  background-color: #0365cd;
+}
+
+.template-button {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.template-button:hover {
+  background-color: #0365cd;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* Upload button */
+.upload-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #218838;
+}
+
+/* Cancel button */
+.cancel-button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* Disabled buttons */
+.upload-button:disabled,
+.cancel-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+
+
+
+
+
+
+
+/* Margin for instruction box */
+.instruction-box {
+  margin-bottom: 20px;
+}

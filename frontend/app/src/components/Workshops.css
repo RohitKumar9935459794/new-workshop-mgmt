@@ -1,5 +1,5 @@
 .workshop-table-container {
-  padding: 20px;
+  padding: 10px;
 }
 
 .workshop-table {
@@ -8,10 +8,11 @@
 }
 
 .workshop-table th, .workshop-table td {
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #ccc;
   text-align: left;
 }
+
 
 .workshop-table th {
   background-color: #f0f0f0;
@@ -31,4 +32,37 @@
 .no-results {
   text-align: center;
   font-style: italic;
+}
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-button {
+  padding: 0.1rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.download-button {
+  margin: 10px 0;
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #1b5e20;
 }

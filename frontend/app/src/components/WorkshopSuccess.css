@@ -1,0 +1,71 @@
+/* WorkshopSuccess.css */
+
+.workshop-success {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.workshop-success h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 28px;
+}
+
+.workshop-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.workshop-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.workshop-table td:first-child {
+  font-weight: 600;
+  width: 35%;
+  color: #333;
+  background-color: #f0f0f0;
+}
+
+.workshop-table td:last-child {
+  color: #555;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.submit-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #2980b9;
+}
+
+.submit-btn.secondary {
+  background-color: #95a5a6;
+}
+
+.submit-btn.secondary:hover {
+  background-color: #7f8c8d;
+}
