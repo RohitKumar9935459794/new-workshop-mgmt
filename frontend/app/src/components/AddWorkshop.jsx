@@ -1,5 +1,5 @@
 // src/components/AddWorkshop.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addWorkshop } from '../services/api';
 import './AddWorkshop.css';
@@ -16,6 +16,7 @@ const AddWorkshop = () => {
     centre: '',
     mode: '',
     speaker_name: '',
+    workshop_type: '',
     other1: '',
     other2: '',
     other3: ''
@@ -23,12 +24,32 @@ const AddWorkshop = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+
+
+    // Refs for the textareas
+  const technologyRef = useRef(null);
+  const speakerNameRef = useRef(null);
+  const other1Ref = useRef(null);
+  const other2Ref = useRef(null);
+  const other3Ref = useRef(null);
+
+    // Adjust height of textarea dynamically
+  const autoExpand = (e) => {
+    const target = e.target;
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight}px`;
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+        if (name === 'technology') autoExpand(e);
+    if (name === 'speaker_name') autoExpand(e);
+    if (name === 'other1') autoExpand(e);
+    if (name === 'other2') autoExpand(e);
+    if (name === 'other3') autoExpand(e);
   };
 
   const handleSubmit = async (e) => {
@@ -37,8 +58,10 @@ const AddWorkshop = () => {
     setError('');
     
     try {
-      await addWorkshop(formData);
-      navigate('/new');
+
+    const response = await addWorkshop(formData); // assuming it returns { message: "...", workshop_id: "12345" }
+    const { bool, message, workshop_id } = response;
+       navigate('/workshop-success', { state: { formData, workshop_id } }); 
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to add workshop');
     } finally {
@@ -53,7 +76,6 @@ const AddWorkshop = () => {
       {error && <div className="error-message">{error}</div>}
       
       <form onSubmit={handleSubmit}>
-        <div className="form-row">
           <div className="form-group">
             <label>Subject:</label>
             <input
@@ -64,17 +86,19 @@ const AddWorkshop = () => {
               required
             />
           </div>
-          
-          <div className="form-group">
-            <label>From Date:</label>
-            <input
-              type="date"
-              name="from_date"
-              value={formData.from_date}
-              onChange={handleChange}
-              required
-            />
+          <div className="form-row">
+            <div className="form-group">
+             <label>From Date:</label>
+              <input
+                type="date"
+                name="from_date"
+                value={formData.from_date}
+                onChange={handleChange}
+                required
+              />
           </div>
+          
+          
           
           <div className="form-group">
             <label>Till Date:</label>
@@ -86,11 +110,11 @@ const AddWorkshop = () => {
               required
             />
           </div>
-        </div>
+       
         
-        <div className="form-row">
-          <div className="form-group">
-            <label>Duration:</label>
+          
+            <div className="form-group">
+            <label>Duration (in hours):</label>
             <input
               type="number"
               name="duration"
@@ -99,33 +123,40 @@ const AddWorkshop = () => {
               required
             />
           </div>
-        </div>
-        <div className="form-row">
+           </div>
+          <div className="form-row">
           <div className="form-group">
             <label>Technology:</label>
-            <input
-              type="text"
-              name="technology"
-              value={formData.technology}
-              onChange={handleChange}
-              required
-            />
+            <textarea
+            name="technology"
+            value={formData.technology}
+            onChange={handleChange}
+            className="auto-expand"
+    rows={1}
+    required
+  />
+  <small className="input-note">
+    Do not use abbreviations of technology names. Use commas to separate multiple values if applicable.
+  </small>
           </div>
           
-          <div className="form-group">
+          
+         
+<div className="form-group">
             <label>Project:</label>
             <input
               type="text"
               name="project"
               value={formData.project}
               onChange={handleChange}
+              
             />
           </div>
-          
+          </div>
          
-        </div>
+    
         
-        <div className="form-row">
+      <div className="form-row">
           <div className="form-group">
             <label>Center:</label>
             <select
@@ -141,7 +172,8 @@ const AddWorkshop = () => {
             </select>
           </div>
           
-          <div className="form-group">
+          
+            <div className="form-group">
             <label>Mode:</label>
             <select
               name="mode"
@@ -155,50 +187,75 @@ const AddWorkshop = () => {
               <option value="Online">Hybrid</option>
             </select>
           </div>
-          
+          </div>
+          <div className="form-row">
+
           <div className="form-group">
             <label>Speaker Name:</label>
-            <input
-              type="text"
-              name="speaker_name"
-              value={formData.speaker_name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="form-row">
-          <div className="form-group">
-            <label>Other Option 1:</label>
-            <input
-              type="text"
-              name="other1"
-              value={formData.other1}
-              onChange={handleChange}
-            />
+             <textarea
+    name="speaker_name"
+    value={formData.speaker_name}
+    onChange={handleChange}
+    className="auto-expand"
+    rows={1}
+    required
+  />
+   <small className="input-note">
+    Use commas to separate multiple speaker names if applicable.
+  </small>
           </div>
           
+      
+
+       
+        
           <div className="form-group">
-            <label>Other Option 2:</label>
+            <label>Workshop Type:</label>
             <input
               type="text"
-              name="other2"
-              value={formData.other2}
+              name="workshop_type"
+              value={formData.workshop_type}
               onChange={handleChange}
+              
             />
+          </div>
+          </div>
+          <div className="form-row">
+          <div className="form-group">
+            <label>Other Option 1:</label>
+            <textarea
+    name="other1"
+    value={formData.other1}
+    onChange={handleChange}
+    className="auto-expand"
+    rows={1}
+  />
+          </div>
+       
+          
+            <div className="form-group">
+            <label>Other Option 2:</label>
+            <textarea
+    name="other2"
+    value={formData.other2}
+    onChange={handleChange}
+    className="auto-expand"
+    rows={1}
+  />
           </div>
           
           <div className="form-group">
             <label>Other Option 3:</label>
-            <input
-              type="text"
-              name="other3"
-              value={formData.other3}
-              onChange={handleChange}
-            />
+            <textarea
+    name="other3"
+    value={formData.other3}
+    onChange={handleChange}
+    className="auto-expand"
+    rows={1}
+  />
           </div>
-        </div>
+          </div>
+       
         
         <button type="submit" disabled={loading} className="submit-btn">
           {loading ? 'Adding...' : 'Add Workshop'}

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { getWorkshops, getWorkshopFilters, downloadWorkshopReports } from '../services/api';
+import { getParticipantsReports, getWorkshopFilters, downloadParticipantReports } from '../services/api';
+import './ParticipantTable.css';
 import StatsCard from './StatsCard';
 
-import './Workshops.css';
-
-const WorkshopTable = () => {
-  const [workshops, setWorkshops] = useState([]);
-  const [filters, setFilters] = useState({page: 1 });
+const ParticipantTable = () => {
+  const [participants, setParticipants] = useState([]);
+  const [filters, setFilters] = useState({ page: 1 });
   const [filterOptions, setFilterOptions] = useState({});
   const [loading, setLoading] = useState(true);
   const [downloadFormat, setDownloadFormat] = useState('excel'); // default format
-  const [totalWorkshops, setTotalWorkshops] = useState(0);
-  
+  const [totalParticipants, setTotalParticipants] = useState(0);
 
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    has_next_page: false,
+    has_prev_page: false
+  });
 
-  // Fetch filter options on mount
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -27,34 +30,23 @@ const WorkshopTable = () => {
     fetchFilters();
   }, []);
 
-  // state for pagination
-const [pagination, setPagination] = useState({
-  current_page: 1,
-  total_pages: 1,
-  has_next_page: false,
-  has_prev_page: false
-});
-
-  // Fetch workshops whenever filters change
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchParticipants = async () => {
       setLoading(true);
       try {
-        const workshopData = await getWorkshops(filters);
-        setWorkshops(workshopData?.data?.workshops || []);
-        setPagination(workshopData?.data?.pagination || {});
-        setTotalWorkshops(workshopData?.data?.pagination.total_items || 0);
-
+        const data = await getParticipantsReports(filters);
+        setParticipants(data?.data?.participants || []);
+        setPagination(data?.data?.pagination || {});
+        setTotalParticipants(data?.data?.total_participants || 0);
       } catch (error) {
-        console.error('Error fetching workshops:', error);
+        console.error('Error fetching participants:', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
+    fetchParticipants();
   }, [filters]);
 
-  // Handle filter change
   const handleFilterChange = (e, field) => {
     const value = e.target.value;
     setFilters(prev => ({
@@ -64,7 +56,7 @@ const [pagination, setPagination] = useState({
     }));
   };
 
-  const handleDateChange = (e, field) => {
+    const handleDateChange = (e, field) => {
     const value = e.target.value;
     setFilters(prev => ({
       ...prev,
@@ -74,31 +66,27 @@ const [pagination, setPagination] = useState({
   };
 
   const handleNextPage = () => {
-  if (pagination.has_next_page) {
-    setFilters(prev => ({
-      ...prev,
-      page: pagination.current_page + 1
-    }));
-  }
-};
+    if (pagination.has_next_page) {
+      setFilters(prev => ({ ...prev, page: pagination.current_page + 1 }));
+    }
+  };
 
-const handlePrevPage = () => {
-  if (pagination.has_prev_page) {
-    setFilters(prev => ({
-      ...prev,
-      page: pagination.current_page - 1
-    }));
-  }
-};
+  const handlePrevPage = () => {
+    if (pagination.has_prev_page) {
+      setFilters(prev => ({ ...prev, page: pagination.current_page - 1 }));
+    }
+  };
 
   return (
-    <div className="workshop-table-container">
+    <div className="participant-table-container">
+    
+
       <div className="stats-wrapper">
   <div className="stats-card-container">
-    <StatsCard title="Total Workshops" value={totalWorkshops} loading={loading} />
+    <StatsCard title="Total Participants" value={totalParticipants} loading={loading} />
   </div>
 </div>
-      <select
+   <select
   value={downloadFormat}
   onChange={(e) => setDownloadFormat(e.target.value)}
   className="format-selector"
@@ -106,14 +94,13 @@ const handlePrevPage = () => {
   <option value="excel">Excel</option>
   <option value="pdf">PDF</option>
 </select>
-      <button onClick={() => downloadWorkshopReports(filters, downloadFormat)} className="download-button">
+      <button onClick={() => downloadParticipantReports(filters, downloadFormat)} className="download-button">
   Download Report
 </button>
-     
 
       <div className="filters">
         <select onChange={(e) => handleFilterChange(e, 'subject')} value={filters.subject || 'All'}>
-          <option value = 'All'>All Subjects</option>
+          <option value="All">All Subjects</option>
           {filterOptions.subjects?.map((sub, i) => (
             <option key={i} value={sub}>{sub}</option>
           ))}
@@ -134,35 +121,35 @@ const handlePrevPage = () => {
         />
 
         <select onChange={(e) => handleFilterChange(e, 'technology')} value={filters.technology || 'All'}>
-          <option value = 'All'>All Technologies</option>
+          <option value="All">All Technologies</option>
           {filterOptions.technologies?.map((tech, i) => (
             <option key={i} value={tech}>{tech}</option>
           ))}
         </select>
 
         <select onChange={(e) => handleFilterChange(e, 'project')} value={filters.project || 'All'}>
-          <option value = 'All'>All Projects</option>
+          <option value="All">All Projects</option>
           {filterOptions.projects?.map((proj, i) => (
             <option key={i} value={proj}>{proj}</option>
           ))}
         </select>
 
         <select onChange={(e) => handleFilterChange(e, 'centre')} value={filters.centre || 'All'}>
-          <option value = 'All'>All Centres</option>
+          <option value="All">All Centres</option>
           {filterOptions.centres?.map((c, i) => (
             <option key={i} value={c}>{c}</option>
           ))}
         </select>
 
         <select onChange={(e) => handleFilterChange(e, 'mode')} value={filters.mode || 'All'}>
-          <option value = 'All'>All Modes</option>
+          <option value="All">All Modes</option>
           {filterOptions.modes?.map((m, i) => (
             <option key={i} value={m}>{m}</option>
           ))}
         </select>
 
         <select onChange={(e) => handleFilterChange(e, 'speaker')} value={filters.speaker || 'All'}>
-          <option value = 'All'>All Speakers</option>
+          <option value="All">All Speakers</option>
           {filterOptions.speakers?.map((s, i) => (
             <option key={i} value={s}>{s}</option>
           ))}
@@ -170,69 +157,63 @@ const handlePrevPage = () => {
       </div>
 
       {loading ? (
-        <div className="loading">Loading workshops...</div>
+        <div className="loading">Loading participants...</div>
       ) : (
-        <table className="workshop-table">
+        <table className="participant-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Subject</th>
-              <th>From Date</th>
-              <th>Till Date</th>
-              <th>Technology</th>
-              <th>Project</th>
-              <th>Centre</th>
-              <th>Mode</th>
-              <th>Speaker</th>
-              <th>Participants</th>
+              <th>Participant Name</th>
+              <th>Fathers Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>Highest Qualifications</th>
+              <th>Working</th>
+              <th>Designation</th>
+              <th>Department</th>
+              <th>College Name</th>
+              <th>Degree</th>
+              <th>Workshop ID</th>
             </tr>
           </thead>
           <tbody>
-            {workshops.length > 0 ? (
-              workshops.map(w => (
-                <tr key={w.workshop_id}>
-                  <td>{w.workshop_id}</td>
-                  <td>{w.subject}</td>
-                  <td>{w.from_date}</td>
-                  <td>{w.till_date}</td>
-                  <td>{w.technologies}</td>
-                  <td>{w.project}</td>
-                  <td>{w.centre}</td>
-                  <td>{w.mode}</td>
-                  <td>{w.speakers}</td>
-                  <td>{w.participant_count}</td>
+            {participants.length > 0 ? (
+              participants.map((p) => (
+                <tr key={p.participant_id}>
+                  <td>{p.Name}</td>
+                  <td>{p.FATHERS_NAME}</td>
+                  <td>{p.Email}</td>
+                  <td>{p.MobileNo}</td>
+                  <td>{p.HighestQualifications}</td>
+                  <td>{p.Working}</td>
+                  <td>{p.Designation}</td>
+                  <td>{p.Department}</td>
+                  <td>{p.CollegeName}</td>
+                  <td>{p.Degree}</td>
+                  <td>{p.workshop_id}</td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="10" className="no-results">No workshops found</td>
+                <td colSpan="9" className="no-results">No participants found</td>
               </tr>
             )}
           </tbody>
         </table>
-        
       )}
+
       <div className="pagination-controls">
-  <button
-    onClick={handlePrevPage}
-    disabled={!pagination.has_prev_page}
-    className="pagination-button"
-  >
-    Previous
-  </button>
-  <span>Page {pagination.current_page} of {pagination.total_pages}</span>
-  <button
-    onClick={handleNextPage}
-    disabled={!pagination.has_next_page}
-    className="pagination-button"
-  >
-    Next
-  </button>
-</div>
-      
-      
+        <button onClick={handlePrevPage} disabled={!pagination.has_prev_page} className="pagination-button">
+          Previous
+        </button>
+        <span>
+          Page {pagination.current_page || 1} of {pagination.total_pages || 1}
+        </span>
+        <button onClick={handleNextPage} disabled={!pagination.has_next_page} className="pagination-button">
+          Next
+        </button>
+      </div>
     </div>
   );
 };
 
-export default WorkshopTable;
+export default ParticipantTable;

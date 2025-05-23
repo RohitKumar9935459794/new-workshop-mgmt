@@ -20,14 +20,20 @@ const Navbar = ({ activeTab, setActiveTab }) => {
             Dashboard
           </Link>
         </li>
-        <li className={`nav-item ${activeTab === 'workshops' ? 'active' : ''}`}>
-          <Link to="/workshops" onClick={() => setActiveTab('workshops')}>
-            Workshops
-          </Link>
-        </li>
         <li className={`nav-item ${activeTab === 'add-workshop' ? 'active' : ''}`}>
           <Link to="/add-workshop" onClick={() => setActiveTab('add-workshop')}>
-            Add Workshop
+            Add new Workshop
+          </Link>
+        </li>
+        <li className={`nav-item ${activeTab === 'workshops' ? 'active' : ''}`}>
+          <Link to="/workshops" onClick={() => setActiveTab('workshops')}>
+            Get Workshop Reports
+          </Link>
+        </li>
+        
+        <li className={`nav-item ${activeTab === 'participants' ? 'active' : ''}`}>
+          <Link to="/participant-reports" onClick={() => setActiveTab('participants')}>
+            Get Participant Reports
           </Link>
         </li>
       </ul>

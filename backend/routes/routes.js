@@ -18,7 +18,6 @@ const path = require('path');
 //     "duration": 2,
 //     "technology": ["React", "Node.js"],
 //     "project": "Web Development",
-//     "venue": "Auditorium",
 //     "centre": "Janakpuri",
 //     "mode": "offline",
 //     "speaker_name": ["Alice", "Bob"],
@@ -108,11 +107,11 @@ router.post('/workshops/:workshopId/upload', upload.single('file'), async (req, 
             const qualification = row.Qualification || null;
             const email = row.Email || null;
             const mobile_number = row.Mobile_Number || null;
-            const working = row.working || null;
-            const designation = row.designation || null;
-            const department = row.department || null;
-            const college_name = row.college_name || null;
-            const degree = row.degree || null;
+            const working = row.Working || null;
+            const designation = row.Designation || null;
+            const department = row.Department || null;
+            const college_name = row.College_Name || null;
+            const degree = row.Degree || null;
 
             await db.query(
                 "INSERT INTO participant_details (name, fathers_name, Highestqualifications, mobileNo, email, working, designation, department, collegename, degree, workshop_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",

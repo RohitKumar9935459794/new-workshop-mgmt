@@ -1,51 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { addParticipantToWorkshop } from '../services/api';
+import React, { useState } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import './UploadParticipants.css';
-// import './ParticipantsTable.css';
+
+
+const expectedHeaders = [
+  "Name",
+  "Fathers_Name",
+  "Qualifiaction",
+  "Designation",
+  "Colleger_Name",
+  "Mobile_Number",
+  "Email",
+  "Working",
+  "Department",
+  "Degree"
+];
+
+const validateExcelHeaders = async (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const workbook = XLSX.read(e.target.result, { type: 'binary' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      const headers = jsonData[0] || [];
+      const missingHeaders = expectedHeaders.filter(header => !headers.includes(header));
+
+      if (missingHeaders.length > 0) {
+        reject(`Missing headers: ${missingHeaders.join(', ')}`);
+      } else {
+        resolve(true);
+      }
+    };
+    reader.readAsBinaryString(file);
+  });
+};
+
+
+const handleDownloadTemplate = () => {
+  const ws = XLSX.utils.aoa_to_sheet([expectedHeaders]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "ParticipantsTemplate");
+  const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  saveAs(new Blob([wbout], { type: "application/octet-stream" }), "participants_template.xlsx");
+};
+
 
 const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [participants, setParticipants] = useState([]);
-  const [pagination, setPagination] = useState({
-    current_page: 1,
-    items_per_page: 20,
-    total_items: 0
-  });
-// need to update
-  // // Fetch participants when component mounts or workshopId changes to fetch total count of participants
-  // useEffect(() => {
-  //   fetchParticipants();
-  // }, [workshopId]);
-
-  // const fetchParticipants = async (page = 1) => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:5000/api/${workshopId}?page=${page}&limit=${pagination.items_per_page}`
-  //     );
-  //     const data = await response.json();
-      
-  //     if (data.success) {
-  //       setParticipants(data.data.participants);
-  //       setPagination(data.data.pagination);
-  //     }
-  //   } catch (err) {
-  //     console.error('Error fetching participants:', err);
-  //   }
-  // };
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
-    
+
     if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
       setError('Only Excel files (.xlsx, .xls) are allowed');
       return;
     }
-    
+
     setFile(selectedFile);
     setError('');
     setSuccess(false);
@@ -57,31 +75,24 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
       setError('Please select a file');
       return;
     }
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
+      await validateExcelHeaders(file);
       await addParticipantToWorkshop(workshopId, file);
       setSuccess(true);
       setFile(null);
-      
+
       // Refresh participants list after successful upload
       setTimeout(() => {
-        fetchParticipants();
         if (onUploadSuccess) onUploadSuccess();
       }, 1500);
-      
     } catch (err) {
-      setError(err.message || 'Failed to upload participants');
+      setError(err.message || 'Failed to upload participants. Make sure to follow all Instructions.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= pagination.total_pages) {
-      fetchParticipants(newPage);
     }
   };
 
@@ -89,19 +100,42 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
     <div className="participants-container">
       <div className="upload-section">
         <div className="upload-participants">
-          <h3>Add Participants Excel</h3>
+          <h3>Add Participant List via Excel</h3>
+
+          {/* Instructions Box */}
+           
+          <div className="instruction-box">
+<div className="instructions">
+  <strong>📌 Instructions:</strong>
+            <ul>
+              <li>Only <strong>Excel</strong> files with <i>.xlsx</i> or <i>.xls</i> extension are accepted.</li>
+              <li>The data must be in the <strong>first sheet</strong> of the Excel file.</li>
+              <li>Ensure that specific columns names matches below format. (case-sensitive):</li>
+              <code><i>
+                
+                Name, Fathers_Name, Qualification, Designation, College_Name, Mobile_Number, Email, Working, Department, Degree
+               </i></code>
+              <li>Make sure the headers are in the first row of the sheet.</li>
+            </ul>
+</div>
+            
+            <button onClick={handleDownloadTemplate} className="template-button">
+    Download Excel Template
+  </button> 
+          </div>
           
           {error && <div className="error-message">{error}</div>}
           {success && (
             <div className="success-message">
-              Participants uploaded successfully!
+              ✅ Participants uploaded successfully!
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit}>
             <div className="file-input-container">
+              
               <label className="file-input-label">
-                Choose Excel File
+                📁 Choose Excel File
                 <input
                   type="file"
                   accept=".xlsx, .xls"
@@ -116,8 +150,10 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
                 </div>
               )}
             </div>
-            
+
             <div className="button-group">
+               
+
               <button
                 type="submit"
                 disabled={!file || loading}
@@ -133,87 +169,12 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
               >
                 Close
               </button>
-
-
-              
             </div>
           </form>
         </div>
       </div>
-      <div>
-        
-      </div>
-      
-      </div>
-      
- );
-  };
-{/* /* 
-      <div className="participants-table-section">
-        <h2>Participants for Workshop #{workshopId}</h2>
-        
-        {participants.length > 0 ? (
-          <>
-            <div className="table-responsive">
-              <table className="participants-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Father's Name</th>
-                    <th>Qualification</th>
-                    <th>Mobile</th>
-                    <th>Email</th>
-                    <th>College</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {participants.map((participant) => (
-                    <tr key={participant.regid}>
-                      <td>{participant.regid}</td>
-                      <td>{participant.name}</td>
-                      <td>{participant.fathers_name}</td>
-                      <td>{participant.qualification}</td>
-                      <td>{participant.mobile_number}</td>
-                      <td>{participant.email}</td>
-                      <td>{participant.college_name}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="pagination">
-              <button
-                onClick={() => handlePageChange(pagination.current_page - 1)}
-                disabled={!pagination.has_prev_page}
-              >
-                Previous
-              </button>
-              
-              <span>
-                Page {pagination.current_page} of {pagination.total_pages}
-              </span>
-              
-              <button
-                onClick={() => handlePageChange(pagination.current_page + 1)}
-                disabled={!pagination.has_next_page}
-              >
-                Next
-              </button>
-            </div>
-
-            <div className="pagination-info">
-              Showing {participants.length} of {pagination.total_items} participants
-            </div>
-          </> }
-        ) : (
-          <div className="no-participants">
-            No participants found. Upload an Excel file to add participants.
-          </div>
-        )}
-      </div>
-    </div> */ }
-
+    </div>
+  );
+};
 
 export default UploadParticipants;
