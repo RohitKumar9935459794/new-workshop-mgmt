@@ -38,6 +38,8 @@ const ParticipantTable = () => {
         setParticipants(data?.data?.participants || []);
         setPagination(data?.data?.pagination || {});
         setTotalParticipants(data?.data?.total_participants || 0);
+      console.log("Fetched participants:", data?.data?.participants);
+
       } catch (error) {
         console.error('Error fetching participants:', error);
       } finally {
@@ -178,7 +180,7 @@ const ParticipantTable = () => {
           <tbody>
             {participants.length > 0 ? (
               participants.map((p) => (
-                <tr key={p.participant_id}>
+                <tr key={p.REGID}>
                   <td>{p.Name}</td>
                   <td>{p.FATHERS_NAME}</td>
                   <td>{p.Email}</td>

@@ -8,7 +8,7 @@ import AddWorkshop from './components/AddWorkshop';
 import UploadParticipants from './components/UploadParticipants';  // Keep this if you're using it
 import Navbar from './components/Navbar';
 import WorkshopSuccess from './components/WorkshopSuccess';
-import Participants from './components/ParticipantTable';
+import WorkshopParticipant from './components/WorkshopParticipant';
  import './App.css';
 import ParticipantTable from './components/ParticipantTable';
 
@@ -34,6 +34,7 @@ import ParticipantTable from './components/ParticipantTable';
           <Route path="/workshop-success" element={<WorkshopSuccess />} />
           <Route path="/upload-participants" element={<UploadParticipants />} />
           <Route path="/participant-reports" element={<ParticipantTable/>} />
+          <Route path="/workshops/:workshop_id/participants" element={<WorkshopParticipant />} />
 
         </Route>
         

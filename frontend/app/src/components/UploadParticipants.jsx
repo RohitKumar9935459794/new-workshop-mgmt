@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import './UploadParticipants.css';
+import { addParticipantToWorkshop } from '../services/api';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 
 const expectedHeaders = [
-  "Name",
+  "Name",// mandatory
   "Fathers_Name",
-  "Qualifiaction",
+  "Qualification",
   "Designation",
-  "Colleger_Name",
+  "College_Name",
   "Mobile_Number",
   "Email",
   "Working",
@@ -21,19 +24,35 @@ const validateExcelHeaders = async (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const workbook = XLSX.read(e.target.result, { type: 'binary' });
+
+     try{
+ const workbook = XLSX.read(e.target.result, { type: 'binary' });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
       const headers = jsonData[0] || [];
-      const missingHeaders = expectedHeaders.filter(header => !headers.includes(header));
 
-      if (missingHeaders.length > 0) {
-        reject(`Missing headers: ${missingHeaders.join(', ')}`);
-      } else {
-        resolve(true);
+      // Check for at least one match with expected headers
+      const foundHeaders = expectedHeaders.filter(header => headers.includes(header));
+
+      if (foundHeaders.length === 0) {
+          reject("No expected headers found. Please check your Excel format.");
+        }  else if (!headers.includes("Name")) {
+          return reject("Missing mandatory header: Name");
+        }else {
+          resolve(true); // Success even if some headers are missing
+        }
+
+     }catch (error) {
+        reject("Error reading Excel file: " + error.message);
       }
+
+      
+      
+      };
+     reader.onerror = () => {
+      reject("File could not be read");
     };
     reader.readAsBinaryString(file);
   });
@@ -49,12 +68,17 @@ const handleDownloadTemplate = () => {
 };
 
 
-const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
+const UploadParticipants = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const workshopId = location.state?.workshopId;
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+// for file input 
+  const fileInputRef = useRef(null);
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -82,12 +106,13 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
     try {
       await validateExcelHeaders(file);
       await addParticipantToWorkshop(workshopId, file);
+      
       setSuccess(true);
       setFile(null);
 
       // Refresh participants list after successful upload
       setTimeout(() => {
-        if (onUploadSuccess) onUploadSuccess();
+        navigate('/workshops');
       }, 1500);
     } catch (err) {
       setError(err.message || 'Failed to upload participants. Make sure to follow all Instructions.');
@@ -142,6 +167,7 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
                   onChange={handleFileChange}
                   disabled={loading}
                   className="file-input"
+                  ref={fileInputRef}
                 />
               </label>
               {file && (
@@ -163,7 +189,14 @@ const UploadParticipants = ({ workshopId, onClose, onUploadSuccess }) => {
               </button>
               <button
                 type="button"
-                onClick={onClose}
+                onClick={() => {
+    setFile(null);
+    setError('');
+    setSuccess(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Clear the actual input element file
+    }
+  }}
                 className="cancel-button"
                 disabled={loading}
               >
