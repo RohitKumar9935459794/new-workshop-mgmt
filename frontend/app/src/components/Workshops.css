@@ -66,3 +66,30 @@
 .download-button:hover {
   background-color: #1b5e20;
 }
+
+.add-participants-button {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.add-participants-button:hover {
+  background-color: #1b5e20;
+}
+.view-participants-button {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.view-participants-button:hover {
+  background-color: #1b5e20;
+}

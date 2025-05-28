@@ -87,9 +87,11 @@ export const getParticipantsReports = async ( params = {}) => {
 //API 7
 // Fetch participants for a specific workshop by its ID (VARCHAR) with pagination
 
-export const getParticipantswithId = async (workshopId) => {
+export const getParticipantswithId = async (workshopId, page=1) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/participants/${workshopId}`);
+    const response = await axios.get(`${API_BASE_URL}/participants/${workshopId}`,{
+      params: { page }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching participants:', error.response?.data || error.message);
