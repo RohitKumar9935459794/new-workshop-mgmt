@@ -431,7 +431,7 @@ router.get('/participants/:workshopId', async (req, res) => {
   
       // 4️⃣ Fetch participants for that workshop
       const [participants] = await db.query(
-        `SELECT name, fathers_name, Highestqualifications, mobileNo, email, working, designation, department, collegename, degree FROM participant_details
+        `SELECT regid, name, fathers_name, Highestqualifications, mobileNo, email, working, designation, department, collegename, degree FROM participant_details
          WHERE workshop_id = ? ORDER BY regid ASC LIMIT ? OFFSET ?`, [workshopId, limit, offset]
       );
   

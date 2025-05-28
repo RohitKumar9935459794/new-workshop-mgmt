@@ -59,7 +59,18 @@ const AddWorkshop = () => {
     
     try {
 
-    const response = await addWorkshop(formData); // assuming it returns { message: "...", workshop_id: "12345" }
+      const payload = {
+      ...formData,
+      technology: formData.technology
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean),
+      speaker_name: formData.speaker_name
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean),
+    };
+    const response = await addWorkshop(payload); // assuming it returns { message: "...", workshop_id: "12345" }
     const { bool, message, workshop_id } = response;
        navigate('/workshop-success', { state: { formData, workshop_id } }); 
     } catch (err) {
@@ -184,7 +195,7 @@ const AddWorkshop = () => {
               <option value="">Select Mode</option>
               <option value="Offline">Offline</option>
               <option value="Online">Online</option>
-              <option value="Online">Hybrid</option>
+              <option value="Hybrid">Hybrid</option>
             </select>
           </div>
           </div>

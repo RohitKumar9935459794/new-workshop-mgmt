@@ -8,7 +8,7 @@ const WorkshopSuccess = () => {
   const { formData, workshop_id, message } = location.state || {};
 
   const handleAddParticipants = () => {
-    navigate('/upload-participants', { state: { workshop_id } });
+    navigate('/upload-participants', { state: { workshopId: workshop_id } });
   };
   if (!formData || !workshop_id) {
     return <p>Error: Missing workshop data.</p>;
@@ -19,7 +19,7 @@ const WorkshopSuccess = () => {
 
   const handleAddLater = () => {
     alert("Workshop has been added successfully!");
-    navigate('/'); // Or wherever your dashboard is
+    navigate('/workshops'); // get workshops raports
   };
 
   return (
@@ -39,7 +39,7 @@ const WorkshopSuccess = () => {
 
       <div className="button-group">
         <button className="submit-btn" onClick={handleAddParticipants}>Add Participants Now</button>
-        <button className="submit-btn secondary" onClick={() => alert('You can add participants later from the dashboard.')}>
+        <button className="submit-btn secondary" onClick={handleAddLater}>
           Add Later
         </button>
       </div>

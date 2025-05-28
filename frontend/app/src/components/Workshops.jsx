@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getWorkshops, getWorkshopFilters, downloadWorkshopReports } from '../services/api';
 import StatsCard from './StatsCard';
 
 import './Workshops.css';
-
+ 
 const WorkshopTable = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [workshops, setWorkshops] = useState([]);
   const [filters, setFilters] = useState({page: 1 });
   const [filterOptions, setFilterOptions] = useState({});
   const [loading, setLoading] = useState(true);
   const [downloadFormat, setDownloadFormat] = useState('excel'); // default format
   const [totalWorkshops, setTotalWorkshops] = useState(0);
-  
-
+ 
 
   // Fetch filter options on mount
   useEffect(() => {
@@ -44,7 +47,6 @@ const [pagination, setPagination] = useState({
         setWorkshops(workshopData?.data?.workshops || []);
         setPagination(workshopData?.data?.pagination || {});
         setTotalWorkshops(workshopData?.data?.pagination.total_items || 0);
-
       } catch (error) {
         console.error('Error fetching workshops:', error);
       } finally {
@@ -175,32 +177,48 @@ const handlePrevPage = () => {
         <table className="workshop-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>ID
+                {/* <small className="input-note">
+    Click on Workshop ID to show participant details.
+  </small> */}
+              </th>
               <th>Subject</th>
               <th>From Date</th>
               <th>Till Date</th>
               <th>Technology</th>
               <th>Project</th>
+              <th>Duration</th>
               <th>Centre</th>
               <th>Mode</th>
               <th>Speaker</th>
               <th>Participants</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {workshops.length > 0 ? (
               workshops.map(w => (
                 <tr key={w.workshop_id}>
-                  <td>{w.workshop_id}</td>
+                  <td><Link to={`/workshops/${w.workshop_id}/participants`}>{w.workshop_id}</Link></td>
                   <td>{w.subject}</td>
                   <td>{w.from_date}</td>
                   <td>{w.till_date}</td>
                   <td>{w.technologies}</td>
                   <td>{w.project}</td>
+                  <td>{w.duration}</td>
                   <td>{w.centre}</td>
                   <td>{w.mode}</td>
                   <td>{w.speakers}</td>
                   <td>{w.participant_count}</td>
+                  <td>{w.participant_count === 0 ? (
+                    <button className="add-participants-button" onClick={() => navigate('/upload-participants', { state: { workshopId: w.workshop_id } })}>Add Participants</button>)
+                  : (<button
+  className="view-participants-button"
+  onClick={() => navigate(`/workshops/${w.workshop_id}/participants`)}
+>
+  View Participants
+</button>)
+                    }</td>
                 </tr>
               ))
             ) : (
